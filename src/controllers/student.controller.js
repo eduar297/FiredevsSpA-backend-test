@@ -175,6 +175,7 @@ ctr.all = async (req, res) => {
       _id: item._id,
       name: item.name,
       lastName: item.lastName,
+      groupId: item.groupId,
     };
   });
 
