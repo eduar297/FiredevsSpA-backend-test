@@ -7,9 +7,7 @@ ctr.register = async (req, res) => {
     specialty,
     name,
     lastName,
-    address,
     bornCity,
-    phone,
     sex,
     email,
     bornDate,
@@ -30,10 +28,7 @@ ctr.register = async (req, res) => {
     specialty,
     name,
     lastName,
-    address,
-    address,
     bornCity,
-    phone,
     sex,
     email,
     bornDate: new Date(bornDate),
@@ -98,9 +93,7 @@ ctr.edit = async (req, res) => {
   account["specialty"] = specialty;
   account["name"] = name;
   account["lastName"] = lastName;
-  account["address"] = address;
   account["bornCity"] = bornCity;
-  account["phone"] = phone;
   account["sex"] = sex;
   // account["email"] = email; //el email no se debe poder editar
   account["bornDate"] = bornDate;

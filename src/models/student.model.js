@@ -1,8 +1,8 @@
 const mongoose = require("mongoose"),
+  objectId = mongoose.Schema.ObjectId,
   bcrypt = require("bcrypt-nodejs"),
-  professorSchema = new mongoose.Schema(
+  studentSchema = new mongoose.Schema(
     {
-      specialty: String,
       name: String,
       lastName: String,
       bornCity: String,
@@ -10,14 +10,15 @@ const mongoose = require("mongoose"),
       email: String,
       bornDate: Date,
       password: String,
+      groupId: { type: objectId, ref: "Group" },
     },
     { timestamps: true }
   );
 
-professorSchema.methods.encryptPassword = (password) =>
+studentSchema.methods.encryptPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-professorSchema.methods.comparePassword = function (password) {
+studentSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose.model("Professor", professorSchema);
+module.exports = mongoose.model("Student", studentSchema);
