@@ -4,7 +4,8 @@
   "description": "api-rest",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index"
+    "start": "node src/index",
+    "start-dev": "nodemon src/index"
   },
   "author": "Eduardo Moreira Gonzalez",
   "license": "MIT",
