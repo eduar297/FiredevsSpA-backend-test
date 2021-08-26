@@ -1,12 +1,33 @@
 const ctr = {},
   Account = require("../models/student.model"),
-  { createAccountToken } = require("../services/jwt");
+  Group = require("../models/group.model"),
+  { createAccountToken } = require("../services/jwt"),
+  validator = require("validator");
 
 ctr.register = async (req, res) => {
   const { name, lastName, bornCity, sex, email, bornDate, password, groupId } =
     req.body;
 
-  //validar data.... to do
+  if (!validator.isAlpha(name))
+    return res
+      .status(200)
+      .send({ error: "El nombre debe contener solo letras" });
+  if (!validator.isAlpha(lastName))
+    return res
+      .status(200)
+      .send({ error: "Los apellidos deben contener solo letras" });
+  if (!validator.isAlpha(bornCity))
+    return res
+      .status(200)
+      .send({ error: "La ciudad debe contener solo letras" });
+  if (!validator.isAlpha(sex))
+    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+  if (!validator.isEmail(email))
+    return res.status(200).send({ error: "Email inválido" });
+  // if (!validator.isDate(new Date(bornCity)))
+  //   return res.status(200).send({ error: "Fecha inválida" });
+  // if (!validator.isStrongPassword(password))
+  //   return res.status(200).send({ error: "Contraseña débil" });
 
   if (!groupId)
     return res.status(200).send({
@@ -14,7 +35,7 @@ ctr.register = async (req, res) => {
     });
 
   try {
-    var group = await Professor.findById(groupId);
+    var group = await Group.findById(groupId);
     if (!group)
       return res.status(200).send({
         error: `El grupo con id ${groupId} no existe`,
@@ -55,7 +76,8 @@ ctr.register = async (req, res) => {
 ctr.login = async (req, res) => {
   const { email, password } = req.body;
 
-  //validar data.... to do
+  if (!validator.isEmail(email))
+    return res.status(200).send({ error: "Email inválido" });
 
   const account = await Account.findOne({ email: email });
 
@@ -95,7 +117,26 @@ ctr.edit = async (req, res) => {
     groupId,
   } = req.body;
 
-  //validar data.... to do
+  if (!validator.isAlpha(name))
+    return res
+      .status(200)
+      .send({ error: "El nombre debe contener solo letras" });
+  if (!validator.isAlpha(lastName))
+    return res
+      .status(200)
+      .send({ error: "Los apellidos deben contener solo letras" });
+  if (!validator.isAlpha(bornCity))
+    return res
+      .status(200)
+      .send({ error: "La ciudad debe contener solo letras" });
+  if (!validator.isAlpha(sex))
+    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+  // if (!validator.isEmail(email))
+  //   return res.status(200).send({ error: "Email inválido" });
+  // if (!validator.isDate(new Date(bornCity)))
+  //   return res.status(200).send({ error: "Fecha inválida" });
+  // if (!validator.isStrongPassword(password))
+  //   return res.status(200).send({ error: "Contraseña débil" });
 
   if (!groupId)
     return res.status(200).send({
@@ -103,7 +144,7 @@ ctr.edit = async (req, res) => {
     });
 
   try {
-    var group = await Professor.findById(groupId);
+    var group = await Group.findById(groupId);
     if (!group)
       return res.status(200).send({
         error: `El grupo con id ${groupId} no existe`,

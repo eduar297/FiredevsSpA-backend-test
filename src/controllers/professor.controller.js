@@ -1,6 +1,7 @@
 const ctr = {},
   Account = require("../models/professor.model"),
-  { createAccountToken } = require("../services/jwt");
+  { createAccountToken } = require("../services/jwt"),
+  validator = require("validator");
 
 ctr.register = async (req, res) => {
   const {
@@ -14,7 +15,26 @@ ctr.register = async (req, res) => {
     password,
   } = req.body;
 
-  //validar data.... to do
+  if (!validator.isAlpha(name))
+    return res
+      .status(200)
+      .send({ error: "El nombre debe contener solo letras" });
+  if (!validator.isAlpha(lastName))
+    return res
+      .status(200)
+      .send({ error: "Los apellidos deben contener solo letras" });
+  if (!validator.isAlpha(bornCity))
+    return res
+      .status(200)
+      .send({ error: "La ciudad debe contener solo letras" });
+  if (!validator.isAlpha(sex))
+    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+  if (!validator.isEmail(email))
+    return res.status(200).send({ error: "Email inválido" });
+  // if (!validator.isDate(new Date(bornCity)))
+  //   return res.status(200).send({ error: "Fecha inválida" });
+  // if (!validator.isStrongPassword(password))
+  //   return res.status(200).send({ error: "Contraseña débil" });
 
   const existingAccount = await Account.findOne({ email: email });
 
@@ -46,7 +66,8 @@ ctr.register = async (req, res) => {
 ctr.login = async (req, res) => {
   const { email, password } = req.body;
 
-  //validar data.... to do
+  if (!validator.isEmail(email))
+    return res.status(200).send({ error: "Email inválido" });
 
   const account = await Account.findOne({ email: email });
 
@@ -88,7 +109,26 @@ ctr.edit = async (req, res) => {
     password,
   } = req.body;
 
-  //validar data.... to do
+  if (!validator.isAlpha(name))
+    return res
+      .status(200)
+      .send({ error: "El nombre debe contener solo letras" });
+  if (!validator.isAlpha(lastName))
+    return res
+      .status(200)
+      .send({ error: "Los apellidos deben contener solo letras" });
+  if (!validator.isAlpha(bornCity))
+    return res
+      .status(200)
+      .send({ error: "La ciudad debe contener solo letras" });
+  if (!validator.isAlpha(sex))
+    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+  // if (!validator.isEmail(email))
+  //   return res.status(200).send({ error: "Email inválido" });
+  // if (!validator.isDate(new Date(bornCity)))
+  //   return res.status(200).send({ error: "Fecha inválida" });
+  // if (!validator.isStrongPassword(password))
+  //   return res.status(200).send({ error: "Contraseña débil" });
 
   account["specialty"] = specialty;
   account["name"] = name;
