@@ -10,48 +10,54 @@ ctr.register = async (req, res) => {
 
   if (!validator.isAlpha(name))
     return res
-      .status(200)
-      .send({ error: "El nombre debe contener solo letras" });
+      .status(400)
+      .send({ msg: "El nombre debe contener solo letras", type: "name" });
   if (!validator.isAlpha(lastName))
-    return res
-      .status(200)
-      .send({ error: "Los apellidos deben contener solo letras" });
+    return res.status(400).send({
+      msg: "Los apellidos deben contener solo letras",
+      type: "lastName",
+    });
   if (!validator.isAlpha(bornCity))
     return res
-      .status(200)
-      .send({ error: "La ciudad debe contener solo letras" });
+      .status(400)
+      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
   if (!validator.isAlpha(sex))
-    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+    return res
+      .status(400)
+      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
   if (!validator.isEmail(email))
-    return res.status(200).send({ error: "Email inválido" });
+    return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
   //   return res.status(200).send({ error: "Fecha inválida" });
   // if (!validator.isStrongPassword(password))
   //   return res.status(200).send({ error: "Contraseña débil" });
 
   if (!groupId)
-    return res.status(200).send({
-      error: "El estudiante debe tener un grupo asociado",
+    return res.status(400).send({
+      msg: "El estudiante debe tener un grupo asociado",
+      type: "group",
     });
 
   try {
     var group = await Group.findById(groupId);
     if (!group)
-      return res.status(200).send({
-        error: `El grupo con id ${groupId} no existe`,
+      return res.status(400).send({
+        msg: `El grupo con id ${groupId} no existe`,
+        type: "group",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: `groupId invalido`,
+    return res.status(400).send({
+      msg: `groupId invalido`,
+      type: "group",
     });
   }
 
   const existingAccount = await Account.findOne({ email: email });
 
   if (existingAccount)
-    return res.status(200).send({
-      error: "Ya Existe un Usuario con ese email",
-      account: existingAccount,
+    return res.status(400).send({
+      msg: "Ya Existe un Usuario con ese email",
+      type: "email",
     });
 
   const newAccount = new Account({
@@ -77,14 +83,19 @@ ctr.login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!validator.isEmail(email))
-    return res.status(200).send({ error: "Email inválido" });
+    return res.status(400).send({ msg: "Email inválido", type: "email" });
 
   const account = await Account.findOne({ email: email });
 
-  if (!account) return res.status(200).send({ error: "No estás registrado" });
+  if (!account)
+    return res
+      .status(400)
+      .send({ msg: "No estás registrado", type: "unregistered" });
 
   if (!account.comparePassword(password))
-    return res.status(200).send({ error: "Contraseña incorrecta" });
+    return res
+      .status(400)
+      .send({ msg: "Contraseña incorrecta", type: "password" });
 
   return res.status(200).send({
     token: createAccountToken(account._id, "student"),
@@ -119,18 +130,21 @@ ctr.edit = async (req, res) => {
 
   if (!validator.isAlpha(name))
     return res
-      .status(200)
-      .send({ error: "El nombre debe contener solo letras" });
+      .status(400)
+      .send({ msg: "El nombre debe contener solo letras", type: "name" });
   if (!validator.isAlpha(lastName))
-    return res
-      .status(200)
-      .send({ error: "Los apellidos deben contener solo letras" });
+    return res.status(400).send({
+      msg: "Los apellidos deben contener solo letras",
+      type: "lastName",
+    });
   if (!validator.isAlpha(bornCity))
     return res
-      .status(200)
-      .send({ error: "La ciudad debe contener solo letras" });
+      .status(400)
+      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
   if (!validator.isAlpha(sex))
-    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+    return res
+      .status(400)
+      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
   // if (!validator.isEmail(email))
   //   return res.status(200).send({ error: "Email inválido" });
   // if (!validator.isDate(new Date(bornCity)))
@@ -139,19 +153,22 @@ ctr.edit = async (req, res) => {
   //   return res.status(200).send({ error: "Contraseña débil" });
 
   if (!groupId)
-    return res.status(200).send({
-      error: "El estudiante debe tener un grupo asociado",
+    return res.status(400).send({
+      msg: "El estudiante debe tener un grupo asociado",
+      type: "group",
     });
 
   try {
     var group = await Group.findById(groupId);
     if (!group)
-      return res.status(200).send({
-        error: `El grupo con id ${groupId} no existe`,
+      return res.status(400).send({
+        msg: `El grupo con id ${groupId} no existe`,
+        type: "group",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: `groupId invalido`,
+    return res.status(400).send({
+      msg: `groupId invalido`,
+      type: "group",
     });
   }
 

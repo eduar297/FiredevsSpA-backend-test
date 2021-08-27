@@ -17,20 +17,23 @@ ctr.register = async (req, res) => {
 
   if (!validator.isAlpha(name))
     return res
-      .status(200)
-      .send({ error: "El nombre debe contener solo letras" });
+      .status(400)
+      .send({ msg: "El nombre debe contener solo letras", type: "name" });
   if (!validator.isAlpha(lastName))
-    return res
-      .status(200)
-      .send({ error: "Los apellidos deben contener solo letras" });
+    return res.status(400).send({
+      msg: "Los apellidos deben contener solo letras",
+      type: "lastName",
+    });
   if (!validator.isAlpha(bornCity))
     return res
-      .status(200)
-      .send({ error: "La ciudad debe contener solo letras" });
+      .status(400)
+      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
   if (!validator.isAlpha(sex))
-    return res.status(200).send({ error: "El sexo debe contener solo letras" });
+    return res
+      .status(400)
+      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
   if (!validator.isEmail(email))
-    return res.status(200).send({ error: "Email inválido" });
+    return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
   //   return res.status(200).send({ error: "Fecha inválida" });
   // if (!validator.isStrongPassword(password))
@@ -39,9 +42,9 @@ ctr.register = async (req, res) => {
   const existingAccount = await Account.findOne({ email: email });
 
   if (existingAccount)
-    return res.status(200).send({
-      error: "Ya Existe un Usuario con ese email",
-      account: existingAccount,
+    return res.status(400).send({
+      msg: "Ya Existe un Usuario con ese email",
+      type: "email",
     });
 
   const newAccount = new Account({
@@ -67,14 +70,19 @@ ctr.login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!validator.isEmail(email))
-    return res.status(200).send({ error: "Email inválido" });
+    return res.status(400).send({ msg: "Email inválido", type: "email" });
 
   const account = await Account.findOne({ email: email });
 
-  if (!account) return res.status(200).send({ error: "No estás registrado" });
+  if (!account)
+    return res
+      .status(400)
+      .send({ msg: "No estás registrado", type: "unregistered" });
 
   if (!account.comparePassword(password))
-    return res.status(200).send({ error: "Contraseña incorrecta" });
+    return res
+      .status(400)
+      .send({ msg: "Contraseña incorrecta", type: "password" });
 
   return res.status(200).send({
     token: createAccountToken(account._id, "professor"),
@@ -100,31 +108,32 @@ ctr.edit = async (req, res) => {
     specialty,
     name,
     lastName,
-    address,
     bornCity,
-    phone,
     sex,
-    // email,
+    email,
     bornDate,
     password,
   } = req.body;
 
   if (!validator.isAlpha(name))
     return res
-      .status(200)
-      .send({ error: "El nombre debe contener solo letras" });
+      .status(400)
+      .send({ msg: "El nombre debe contener solo letras", type: "name" });
   if (!validator.isAlpha(lastName))
-    return res
-      .status(200)
-      .send({ error: "Los apellidos deben contener solo letras" });
+    return res.status(400).send({
+      msg: "Los apellidos deben contener solo letras",
+      type: "lastName",
+    });
   if (!validator.isAlpha(bornCity))
     return res
-      .status(200)
-      .send({ error: "La ciudad debe contener solo letras" });
+      .status(400)
+      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
   if (!validator.isAlpha(sex))
-    return res.status(200).send({ error: "El sexo debe contener solo letras" });
-  // if (!validator.isEmail(email))
-  //   return res.status(200).send({ error: "Email inválido" });
+    return res
+      .status(400)
+      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
+  if (!validator.isEmail(email))
+    return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
   //   return res.status(200).send({ error: "Fecha inválida" });
   // if (!validator.isStrongPassword(password))
@@ -135,7 +144,7 @@ ctr.edit = async (req, res) => {
   account["lastName"] = lastName;
   account["bornCity"] = bornCity;
   account["sex"] = sex;
-  // account["email"] = email; //el email no se debe poder editar
+  account["email"] = email;
   account["bornDate"] = bornDate;
   account["password"] = account.encryptPassword(password);
 

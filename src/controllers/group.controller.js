@@ -7,32 +7,36 @@ ctr.create = async (req, res) => {
     existingGroup = await Group.findOne({ name: name });
 
   if (!name) {
-    return res.status(200).send({
-      error: "El grupo debe tener un nombre",
+    return res.status(400).send({
+      msg: "El grupo debe tener un nombre",
+      type: "name",
     });
   }
 
   if (!professorId)
-    return res.status(200).send({
-      error: "El grupo debe tener un profesor guía",
+    return res.status(400).send({
+      msg: "El grupo debe tener un profesor guía",
+      type: "professor",
     });
 
   try {
     var professor = await Professor.findById(professorId);
     if (!professor)
-      return res.status(200).send({
-        error: `El profesor con id ${professorId} no existe`,
+      return res.status(400).send({
+        msg: `El profesor con id ${professorId} no existe`,
+        type: "professor",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: `professorId invalido`,
+    return res.status(400).send({
+      msg: `professorId invalido`,
+      type: "professor",
     });
   }
 
   if (existingGroup)
-    return res.status(200).send({
-      error: "Ya existe un grupo con ese nombre",
-      group: existingGroup,
+    return res.status(400).send({
+      msg: "Ya existe un grupo con ese nombre",
+      type: "name",
     });
 
   const newGroup = new Group({
@@ -52,12 +56,14 @@ ctr.get = async (req, res) => {
   try {
     var group = await Group.findById(id);
     if (!group)
-      return res.status(200).send({
-        error: `El grupo con id ${id} no existe`,
+      return res.status(400).send({
+        msg: `El grupo con id ${id} no existe`,
+        type: "group",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: `id invalido`,
+    return res.status(400).send({
+      msg: `id invalido`,
+      type: "group",
     });
   }
 
@@ -73,35 +79,41 @@ ctr.edit = async (req, res) => {
   try {
     var group = await Group.findById(id);
     if (!group)
-      return res.status(200).send({
-        error: `El grupo con id ${id} no existe`,
+      return res.status(400).send({
+        msg: `El grupo con id ${id} no existe`,
+        type: "group",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: "id invalido",
+    return res.status(400).send({
+      msg: "id invalido",
+      type: "group",
     });
   }
 
   if (!name) {
-    return res.status(200).send({
-      error: "El grupo debe tener un nombre",
+    return res.status(400).send({
+      msg: "El grupo debe tener un nombre",
+      type: "name",
     });
   }
 
   if (!professorId)
-    return res.status(200).send({
-      error: "El grupo debe tener un profesor guía",
+    return res.status(400).send({
+      msg: "El grupo debe tener un profesor guía",
+      type: "professor",
     });
 
   try {
     var professor = await Professor.findById(professorId);
     if (!professor)
-      return res.status(200).send({
-        error: `El profesor con id ${professorId} no existe`,
+      return res.status(400).send({
+        msg: `El profesor con id ${professorId} no existe`,
+        type: "professor",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: `professorId invalido`,
+    return res.status(400).send({
+      msg: `professorId invalido`,
+      type: "professor",
     });
   }
 
@@ -131,12 +143,14 @@ ctr.deleteGroup = async (req, res) => {
   try {
     var group = await Group.findOneAndDelete({ _id: id });
     if (!group)
-      return res.status(200).send({
-        error: `El grupo con id ${id} no existe`,
+      return res.status(400).send({
+        msg: `El grupo con id ${id} no existe`,
+        type: "group",
       });
   } catch (ex) {
-    return res.status(200).send({
-      error: "id invalido",
+    return res.status(400).send({
+      msg: "id invalido",
+      type: "group",
     });
   }
 
