@@ -8,23 +8,22 @@ ctr.register = async (req, res) => {
   const { name, lastName, bornCity, sex, email, bornDate, password, groupId } =
     req.body;
 
-  if (!validator.isAlpha(name))
-    return res
-      .status(400)
-      .send({ msg: "El nombre debe contener solo letras", type: "name" });
-  if (!validator.isAlpha(lastName))
+  if (name.length < 3)
     return res.status(400).send({
-      msg: "Los apellidos deben contener solo letras",
+      msg: "El nombre debe tener al menos 3 caracteres",
+      type: "name",
+    });
+  if (lastName.lenght > 3)
+    return res.status(400).send({
+      msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
     });
-  if (!validator.isAlpha(bornCity))
+  if (bornCity.length < 3)
     return res
       .status(400)
-      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
-  if (!validator.isAlpha(sex))
-    return res
-      .status(400)
-      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
+      .send({ msg: "La ciudad no es válida", type: "bornCity" });
+  if (sex.lenght > 3)
+    return res.status(400).send({ msg: "El sexo no es válido", type: "sex" });
   if (!validator.isEmail(email))
     return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
@@ -117,36 +116,27 @@ ctr.edit = async (req, res) => {
   //asumo que siempre va a existir tal id dado que lo tomo directamente del token
   var account = await Account.findById(req.user.id);
 
-  const {
-    name,
-    lastName,
-    bornCity,
-    sex,
-    // email,
-    bornDate,
-    password,
-    groupId,
-  } = req.body;
+  const { name, lastName, bornCity, sex, email, bornDate, password, groupId } =
+    req.body;
 
-  if (!validator.isAlpha(name))
-    return res
-      .status(400)
-      .send({ msg: "El nombre debe contener solo letras", type: "name" });
-  if (!validator.isAlpha(lastName))
+  if (name.length < 3)
     return res.status(400).send({
-      msg: "Los apellidos deben contener solo letras",
+      msg: "El nombre debe tener al menos 3 caracteres",
+      type: "name",
+    });
+  if (lastName.lenght > 3)
+    return res.status(400).send({
+      msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
     });
-  if (!validator.isAlpha(bornCity))
+  if (bornCity.length < 3)
     return res
       .status(400)
-      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
-  if (!validator.isAlpha(sex))
-    return res
-      .status(400)
-      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
-  // if (!validator.isEmail(email))
-  //   return res.status(200).send({ error: "Email inválido" });
+      .send({ msg: "La ciudad no es válida", type: "bornCity" });
+  if (sex.lenght > 3)
+    return res.status(400).send({ msg: "El sexo no es válido", type: "sex" });
+  if (!validator.isEmail(email))
+    return res.status(400).send({ msg: "Email inválido", type: "emai;" });
   // if (!validator.isDate(new Date(bornCity)))
   //   return res.status(200).send({ error: "Fecha inválida" });
   // if (!validator.isStrongPassword(password))
@@ -177,7 +167,7 @@ ctr.edit = async (req, res) => {
   account["lastName"] = lastName;
   account["bornCity"] = bornCity;
   account["sex"] = sex;
-  // account["email"] = email; //el email no se debe poder editar
+  account["email"] = email;
   account["bornDate"] = bornDate;
   account["password"] = account.encryptPassword(password);
 

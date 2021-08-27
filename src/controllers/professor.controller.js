@@ -15,23 +15,22 @@ ctr.register = async (req, res) => {
     password,
   } = req.body;
 
-  if (!validator.isAlpha(name))
-    return res
-      .status(400)
-      .send({ msg: "El nombre debe contener solo letras", type: "name" });
-  if (!validator.isAlpha(lastName))
+  if (name.length < 3)
     return res.status(400).send({
-      msg: "Los apellidos deben contener solo letras",
+      msg: "El nombre debe tener al menos 3 caracteres",
+      type: "name",
+    });
+  if (lastName.lenght > 3)
+    return res.status(400).send({
+      msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
     });
-  if (!validator.isAlpha(bornCity))
+  if (bornCity.length < 3)
     return res
       .status(400)
-      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
-  if (!validator.isAlpha(sex))
-    return res
-      .status(400)
-      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
+      .send({ msg: "La ciudad no es válida", type: "bornCity" });
+  if (sex.lenght > 3)
+    return res.status(400).send({ msg: "El sexo no es válido", type: "sex" });
   if (!validator.isEmail(email))
     return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
@@ -115,23 +114,22 @@ ctr.edit = async (req, res) => {
     password,
   } = req.body;
 
-  if (!validator.isAlpha(name))
-    return res
-      .status(400)
-      .send({ msg: "El nombre debe contener solo letras", type: "name" });
-  if (!validator.isAlpha(lastName))
+  if (name.length < 3)
     return res.status(400).send({
-      msg: "Los apellidos deben contener solo letras",
+      msg: "El nombre debe tener al menos 3 caracteres",
+      type: "name",
+    });
+  if (lastName.lenght > 3)
+    return res.status(400).send({
+      msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
     });
-  if (!validator.isAlpha(bornCity))
+  if (bornCity.length < 3)
     return res
       .status(400)
-      .send({ msg: "La ciudad debe contener solo letras", type: "bornCity" });
-  if (!validator.isAlpha(sex))
-    return res
-      .status(400)
-      .send({ msg: "El sexo debe contener solo letras", type: "sex" });
+      .send({ msg: "La ciudad no es válida", type: "bornCity" });
+  if (sex.lenght > 3)
+    return res.status(400).send({ msg: "El sexo no es válido", type: "sex" });
   if (!validator.isEmail(email))
     return res.status(400).send({ msg: "Email inválido", type: "email" });
   // if (!validator.isDate(new Date(bornCity)))
