@@ -13,7 +13,7 @@ ctr.register = async (req, res) => {
       msg: "El nombre debe tener al menos 3 caracteres",
       type: "name",
     });
-  if (lastName.lenght > 3)
+  if (lastName.length < 3)
     return res.status(400).send({
       msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
@@ -124,7 +124,7 @@ ctr.edit = async (req, res) => {
       msg: "El nombre debe tener al menos 3 caracteres",
       type: "name",
     });
-  if (lastName.lenght > 3)
+  if (lastName.length < 3)
     return res.status(400).send({
       msg: "Los apellidos deben deben tener al menos 3 caracteres",
       type: "lastName",
@@ -133,7 +133,7 @@ ctr.edit = async (req, res) => {
     return res
       .status(400)
       .send({ msg: "La ciudad no es válida", type: "bornCity" });
-  if (sex.lenght > 3)
+  if (sex.length < 3)
     return res.status(400).send({ msg: "El sexo no es válido", type: "sex" });
   if (!validator.isEmail(email))
     return res.status(400).send({ msg: "Email inválido", type: "emai;" });
